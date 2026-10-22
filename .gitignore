@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Jupyter / Colab
+.ipynb_checkpoints/
+
+# datasets and training results
+data/
+runs/
+*.pt
+
+# OS
+.DS_Store
+Thumbs.db
