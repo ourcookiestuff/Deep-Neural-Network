@@ -11,11 +11,12 @@ venv/
 # Jupyter / Colab
 .ipynb_checkpoints/
 
-# datasets and training results
+# datasets
 data/
-runs/
 *.pt
 
 # OS
 .DS_Store
 Thumbs.db
+
+

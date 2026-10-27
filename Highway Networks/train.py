@@ -2,7 +2,6 @@
 
 python train.py                            # highway z domyslnym CONFIG
 python train.py model=plain epochs=30      # zmiana parametrow: klucz=wartosc
-python train.py depths=[1,2,4,8]           # plain vs highway dla roznej liczby blokow (Rys. 1)
 """
 import json
 import math
@@ -19,17 +18,17 @@ import plots
 from highway import ConvNet
 
 CONFIG = dict(
-    model="highway",        # highway | plain
-    widths=[32, 64, 128],   # kanaly w kolejnych stage'ach
-    blocks=6,               # bloki highway/plain w kazdym stage'u
+    model="highway",
+    widths=[32, 64, 128],
+    blocks=6,
     gate_bias=-2.0,
     epochs=60,
     batch_size=128,
     lr=0.05,
     momentum=0.9,
     weight_decay=5e-4,
-    lr_decay=0.95,          # mnoznik lr po kazdej epoce
-    depths=None,            # np. [1,2,4,8] -> trenuje plain i highway dla kazdej liczby blokow
+    lr_decay=0.95,
+    depths=None,
     out="runs",
 )
 
@@ -73,7 +72,6 @@ def evaluate(net, loader, device):
 def train(cfg, model, blocks, data, device):
     torch.manual_seed(0)
     train_dl, test_dl = data
-    # plain nie ma konwolucji T -> ~1.41x szersza, zeby miec podobna liczbe parametrow (jak 71 vs 50 w artykule)
     widths = [round(w * math.sqrt(2)) for w in cfg["widths"]] if model == "plain" else cfg["widths"]
     net = ConvNet(model, widths, blocks, cfg["gate_bias"]).to(device)
     opt = torch.optim.SGD(net.parameters(), lr=cfg["lr"], momentum=cfg["momentum"], weight_decay=cfg["weight_decay"])
@@ -109,7 +107,8 @@ def train(cfg, model, blocks, data, device):
             break
 
     torch.save(net.state_dict(), out / "model.pt")
-    (out / "history.json").write_text(json.dumps(dict(cfg=cfg, **hist), indent=2))
+    run_cfg = dict(cfg, model=model, blocks=blocks, widths=widths)
+    (out / "history.json").write_text(json.dumps(dict(cfg=run_cfg, **hist), indent=2))
     plots.plot_history(hist, out / "curves.png", name)
     if model == "highway" and math.isfinite(loss_sum):
         plots.plot_gates(net, test_dl, device, out / "gates.png")

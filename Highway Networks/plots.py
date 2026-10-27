@@ -31,7 +31,6 @@ def plot_history(hist, path, title=""):
 
 
 def plot_depth_comparison(histories, path):
-    """histories: {(model, glebokosc): hist}. Loss treningowy plain vs highway, jak na Rys. 1."""
     fig, axes = plt.subplots(1, 2, figsize=(10, 3.6), sharey=True)
     for ax, model in zip(axes, ("plain", "highway")):
         for (m, depth), hist in sorted(histories.items(), key=lambda kv: kv[0][1]):
@@ -45,7 +44,6 @@ def plot_depth_comparison(histories, path):
 
 
 def to_matrix(rows):
-    """Wektory roznej dlugosci (rozne stage'e) -> macierz [warstwy x kanaly], braki puste."""
     mat = np.full((len(rows), max(len(r) for r in rows)), np.nan)
     for i, r in enumerate(rows):
         mat[i, : len(r)] = r.numpy()
@@ -54,8 +52,6 @@ def to_matrix(rows):
 
 @torch.no_grad()
 def plot_gates(net, loader, device, path, n_samples=1000):
-    """Rys. 2: biasy bramek, srednia aktywnosc bramek, bramki i wyjscia blokow dla jednego obrazu
-    (wartosci usrednione po pikselach, wiersze = warstwy highway, kolumny = kanaly)."""
     layers = net.highway_layers()
     gates, outs = [], []
 
@@ -74,7 +70,7 @@ def plot_gates(net, loader, device, path, n_samples=1000):
     for h in hooks:
         h.remove()
 
-    L = len(layers)  # gates[i] to warstwa i % L
+    L = len(layers)
     panels = [
         ("Bias bramek", [l.T.bias.detach().cpu() for l in layers], None),
         (f"Srednia aktywnosc bramek ({seen} obrazow)", [torch.cat(gates[i::L]).mean(0) for i in range(L)], None),

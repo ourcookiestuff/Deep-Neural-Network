@@ -14,7 +14,6 @@ class HighwayConv(nn.Module):
         nn.init.kaiming_normal_(self.H.weight, nonlinearity="relu")
         nn.init.kaiming_normal_(self.T.weight, nonlinearity="relu")
         nn.init.zeros_(self.H.bias)
-        # ujemny bias bramki -> na starcie warstwa prawie kopiuje wejscie (sekcja 2.2)
         nn.init.constant_(self.T.bias, gate_bias)
 
     def forward(self, x):
@@ -53,7 +52,7 @@ class ConvNet(nn.Module):
             in_ch = w
         self.features = nn.Sequential(*layers)
         self.fc = nn.Linear(in_ch, classes)
-        self.depth = len(widths) * (blocks + 1) + 1  # warstwy z wagami
+        self.depth = len(widths) * (blocks + 1) + 1
 
     def forward(self, x):
         x = self.features(x)
