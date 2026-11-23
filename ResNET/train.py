@@ -1,8 +1,7 @@
-"""Trening ResNet (albo plain) na CIFAR-10 wg sekcji 4.2 artykulu.
+"""Trening ResNet na CIFAR-10.
 
 python train.py                  # ResNet-56
 python train.py model=plain      # plain-56
-python train.py depths=[3,9]     # plain i resnet 20/56 + porownanie (Rys. 6)
 
 Po przerwaniu ponowne uruchomienie wznawia trening z checkpointu.
 """
@@ -28,8 +27,8 @@ CONFIG = dict(
     lr=0.1,
     momentum=0.9,
     weight_decay=1e-4,
-    milestones=[82, 123],  # = 32k i 48k iteracji z artykulu (koniec: 164 epoki = 64k)
-    warmup_epochs=0,  # lr/10 na poczatku (artykul: ResNet-110)
+    milestones=[82, 123],
+    warmup_epochs=0,
     depths=None,
     out="runs",
 )

@@ -35,7 +35,6 @@ def plot_history(hist, path, title=""):
 
 
 def plot_depth_comparison(histories, path):
-    """Rys. 6: przerywana = trening, ciagla = test."""
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharey=True)
     for ax, model in zip(axes, ("plain", "resnet")):
         runs = sorted((d, h) for (m, d), h in histories.items() if m == model)
@@ -69,7 +68,6 @@ def layer_stds(net, loader, device, n_samples=1000):
 
 
 def plot_responses(nets, loader, device, path):
-    """Rys. 7: std warstw w kolejnosci i posortowane."""
     fig, (a, b) = plt.subplots(2, 1, figsize=(9, 6))
     for ((model, depth), net), color in zip(sorted(nets.items()), plt.cm.tab10.colors):
         s = layer_stds(net, loader, device)

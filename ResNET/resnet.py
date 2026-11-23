@@ -5,7 +5,6 @@ import torch.nn.functional as F
 
 
 class ShortcutA(nn.Module):
-    """Skrot "opcja A": identycznosc, przy zmianie wymiaru stride + zera w brakujacych kanalach."""
 
     def __init__(self, in_ch, out_ch, stride):
         super().__init__()
@@ -67,7 +66,6 @@ class ResNet(nn.Module):
         return self.fc(F.adaptive_avg_pool2d(x, 1).flatten(1))
 
     def response_layers(self):
-        """Warstwy BN - ich wyjscia to odpowiedzi warstw z Rys. 7."""
         return [m for m in self.modules() if isinstance(m, nn.BatchNorm2d)]
 
 
